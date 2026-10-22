@@ -90,3 +90,8 @@ coverage/
 tmp/
 temp/
 *.tmp
+
+# Local n8n configuration and backups
+n8n-backup/
+n8n/n8n.env
+n8n.env
