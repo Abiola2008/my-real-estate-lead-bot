@@ -1,1 +1,1 @@
-"""PrimeHomes Realty — Real Estate Lead Bot backend."""
+"""MAYVEE Homes & Properties — Real Estate Lead Bot backend."""

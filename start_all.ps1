@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    Starts all PrimeHomes Lead Bot Services in ONE SINGLE terminal window:
+    Starts all MAYVEE Lead Bot Services in ONE SINGLE terminal window:
     - FastAPI Backend (:8000)
     - n8n Server (:5678)
     - React Frontend (:5173)

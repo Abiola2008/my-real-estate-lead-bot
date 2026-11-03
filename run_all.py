@@ -65,7 +65,7 @@ def main():
     os.system("")
 
     print(f"{CYAN}=========================================================={RESET}")
-    print(f"{YELLOW}  PrimeHomes Real Estate Lead Bot - Unified Runner        {RESET}")
+    print(f"{YELLOW}  MAYVEE Real Estate Lead Bot - Unified Runner        {RESET}")
     print(f"{CYAN}=========================================================={RESET}")
 
     # 1. Check MySQL connection & ensure tables exist

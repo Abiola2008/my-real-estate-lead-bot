@@ -45,7 +45,7 @@ export default function LeadsPage() {
     <div>
       <div className="leads-header">
         <div>
-          <h2>PrimeHomes Leads Pipeline</h2>
+          <h2>MAYVEE Leads Pipeline</h2>
           <p style={{ margin: "0.25rem 0 0", fontSize: "0.85rem", color: "var(--neutral-500)" }}>
             Automatically qualified leads captured from incoming customer enquiries
           </p>

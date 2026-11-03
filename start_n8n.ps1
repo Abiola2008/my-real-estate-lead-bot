@@ -1,5 +1,5 @@
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "  PrimeHomes n8n Startup (PowerShell Script)              " -ForegroundColor Yellow
+Write-Host "  MAYVEE n8n Startup (PowerShell Script)              " -ForegroundColor Yellow
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 # 0. Load .env file if present

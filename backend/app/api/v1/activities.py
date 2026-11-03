@@ -60,7 +60,7 @@ async def log_activity(
 
     if not target_uuid:
         # Fallback: create an initial lead if database is completely empty
-        new_lead = Lead(name="PrimeHomes Customer", status="NEW")
+        new_lead = Lead(name="MAYVEE Customer", status="NEW")
         db.add(new_lead)
         await db.flush()
         target_uuid = new_lead.id

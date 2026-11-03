@@ -1,6 +1,6 @@
 # Backend — FastAPI
 
-PrimeHomes Realty Real Estate Lead Bot API.
+MAYVEE Homes & Properties Real Estate Lead Bot API.
 
 ## Responsibilities
 

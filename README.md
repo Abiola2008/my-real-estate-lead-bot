@@ -1,6 +1,6 @@
 # REAL ESTATE LEAD BOT
 
-## PrimeHomes Realty
+## MAYVEE Homes & Properties
 
 > An AI-powered real estate lead management system that receives customer enquiries, understands their requirements, qualifies leads, stores customer information, and helps the sales team follow up efficiently.
 
@@ -8,7 +8,7 @@
 
 # 1. Project Overview
 
-The **Real Estate Lead Bot** is a digital receptionist and lead qualification system for **PrimeHomes Realty**.
+The **Real Estate Lead Bot** is a digital receptionist and lead qualification system for **MAYVEE Homes & Properties**.
 
 The system is designed to handle incoming customer enquiries automatically instead of requiring a salesperson to manually process every message.
 
@@ -24,7 +24,7 @@ The system should understand the message, extract the useful information, determ
 
 The main goal is to reduce the amount of manual work required to process real estate enquiries.
 
-The system should help PrimeHomes Realty:
+The system should help MAYVEE Homes & Properties:
 
 - Respond to customers faster.
 - Capture leads automatically.

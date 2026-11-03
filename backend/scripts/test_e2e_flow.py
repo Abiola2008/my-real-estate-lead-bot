@@ -29,7 +29,7 @@ from app.services.qualification import score_lead
 
 async def run_integration_verification():
     print("=" * 60)
-    print("PRIMEHOMES REAL ESTATE LEAD BOT - END-TO-END VERIFICATION")
+    print("MAYVEE REAL ESTATE LEAD BOT - END-TO-END VERIFICATION")
     print("=" * 60)
 
     async with AsyncSessionLocal() as db:
@@ -85,7 +85,7 @@ async def run_integration_verification():
         # Step 5: Simulate n8n writing back the bot reply
         print("\n[5] Simulating n8n Bot Response writeback...")
         bot_reply_text = (
-            "Hello Babajide! Thank you for contacting PrimeHomes Realty. "
+            "Hello Babajide! Thank you for contacting MAYVEE Homes & Properties. "
             "We have verified 3-bedroom apartments in Lekki Phase 1 matching your ₦85,000,000 budget. "
             "Our dedicated sales consultant will reach out via +2348035551234 with selected brochures."
         )

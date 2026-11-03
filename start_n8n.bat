@@ -4,7 +4,7 @@ setlocal enabledelayedexpansion
 cd /d "%~dp0"
 
 echo ==========================================================
-echo   PrimeHomes n8n Startup (Batch Script)
+echo   MAYVEE n8n Startup (Batch Script)
 echo ==========================================================
 
 :: 0. Load variables from .env

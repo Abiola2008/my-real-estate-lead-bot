@@ -7,13 +7,13 @@
         "path": "primehomes/lead/process-message",
         "options": {}
       },
-      "id": "07bac21e-c6a0-41f7-84b0-70a1c577245e",
+      "id": "1fceffa7-80e0-4711-9c6f-a1f7a2e31764",
       "name": "Webhook Trigger",
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "position": [
-        -5744,
-        -112
+        -1312,
+        160
       ],
       "webhookId": "prh-lead-process-message-v1"
     },
@@ -21,13 +21,13 @@
       "parameters": {
         "jsCode": "const input = $json.body ?? $json;\nconst required = [\"event\", \"message_id\", \"conversation_id\", \"lead_id\", \"timestamp\"];\nconst missing = required.filter(k => input[k] === undefined || input[k] === null || input[k] === \"\");\nif (missing.length) return [{ json: { ok:false, error:{code:\"INVALID_EVENT\", message:\"Required event fields are missing.\", missing}, statusCode:400 } }];\nif (input.event !== \"MESSAGE_RECEIVED\") return [{ json:{ok:false,error:{code:\"INVALID_EVENT\",message:\"Unsupported event type.\",event:input.event},statusCode:400} }];\nreturn [{json:{ok:true,...input}}];"
       },
-      "id": "9ecc623f-527e-46a1-ab2c-fc0ad44771fb",
+      "id": "6d919a74-f614-4091-a088-a42ade28062c",
       "name": "Validate Event",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5520,
-        -112
+        -1120,
+        160
       ]
     },
     {
@@ -54,26 +54,26 @@
         },
         "options": {}
       },
-      "id": "6b85a97a-910c-4c27-919a-83ab6469c3f2",
+      "id": "fc57fa7c-8498-4e77-8db7-6ab542280306",
       "name": "Validation OK?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -5296,
-        -112
+        -896,
+        160
       ]
     },
     {
       "parameters": {
         "jsCode": "return [{json:{...$json, request_id:$json.request_id || $json.message_id, received_at:new Date().toISOString()}}];"
       },
-      "id": "7b2d12f0-1b52-46c5-8cbe-8a93589af78d",
+      "id": "455b5568-8915-4145-95b6-fa66e4c03691",
       "name": "Normalize Event",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5072,
-        -192
+        -672,
+        80
       ]
     },
     {
@@ -83,26 +83,26 @@
           "timeout": 10000
         }
       },
-      "id": "175aa79e-f29f-4569-892c-bfd6f74c4fc8",
+      "id": "bc1bd9dc-b478-482b-9c34-18a1f68b0181",
       "name": "Get Message",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -5712,
-        96
+        -1312,
+        368
       ]
     },
     {
       "parameters": {
         "jsCode": "const m=$json.data || $json.message || $json;\nconst processed=Boolean(m.processed_at || m.processed === true || m.status === 'PROCESSED');\nreturn [{json:{...$('Normalize Event').item.json,message:m,already_processed:processed}}];"
       },
-      "id": "52bece4a-4381-45e4-b84c-256c650a93c5",
+      "id": "3a35126b-db8f-4cdb-8eb3-f0b7cd2a0d67",
       "name": "Check Idempotency",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5488,
-        96
+        -1088,
+        368
       ]
     },
     {
@@ -129,13 +129,13 @@
         },
         "options": {}
       },
-      "id": "c4277baa-6338-46ae-ac46-aa899ba05a5a",
+      "id": "b684268c-e037-4e6b-b863-65a57633bccf",
       "name": "Duplicate?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -5264,
-        96
+        -864,
+        368
       ]
     },
     {
@@ -145,13 +145,13 @@
           "timeout": 10000
         }
       },
-      "id": "8c78562e-282c-4f2b-9a8e-1c711f63c8b4",
+      "id": "5f3415ec-6db7-405b-af07-e68f48e2e569",
       "name": "Get Conversation",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -5040,
-        96
+        -640,
+        368
       ]
     },
     {
@@ -161,13 +161,13 @@
           "timeout": 10000
         }
       },
-      "id": "ce74b277-6d2e-49eb-b638-0770c89eb24c",
+      "id": "79a60f96-dfdc-4c59-b1ff-7358ea0d8b37",
       "name": "Get Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -5792,
-        416
+        -1392,
+        688
       ]
     },
     {
@@ -177,39 +177,39 @@
           "timeout": 10000
         }
       },
-      "id": "f032302a-3980-4513-af05-f6bad9a59e1e",
+      "id": "98cebe37-9da5-4292-9fcb-ce69545c41aa",
       "name": "Get Conversation History",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -5568,
-        416
+        -1168,
+        688
       ]
     },
     {
       "parameters": {
         "jsCode": "const msg=$('Get Message').item.json.data || $('Get Message').item.json.message || $('Get Message').item.json;\nconst conv=$('Get Conversation').item.json.data || $('Get Conversation').item.json.conversation || $('Get Conversation').item.json;\nconst lead=$('Get Lead').item.json.data || $('Get Lead').item.json.lead || $('Get Lead').item.json;\nconst hr=$('Get Conversation History').item.json;\nconst history=Array.isArray(hr)?hr:(hr.messages||hr.data||[]);\nconst currentMessage=msg.message || msg.content || msg.text || '';\nconst relevantHistory=history.slice(-Number($env.N8N_CONTEXT_MESSAGE_LIMIT || 12));\nconst missing=[['transaction_type',lead.transaction_type],['property_type',lead.property_type],['location',lead.location],['budget',lead.budget_max ?? lead.budget_min],['bedrooms',lead.bedrooms],['timeline',lead.timeline],['contact',lead.email || lead.phone]].filter(([,v])=>v===null||v===undefined||v==='').map(([k])=>k);\nreturn [{json:{...$('Normalize Event').item.json,current_message:currentMessage,conversation:conv,lead,history:relevantHistory,missing_fields:missing}}];"
       },
-      "id": "70a27659-a64a-4e74-94d8-a9b043e85c91",
+      "id": "09f016dc-82ed-48d3-91f9-506b5353e67b",
       "name": "Build AI Context",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5344,
-        416
+        -944,
+        688
       ]
     },
     {
       "parameters": {
-        "jsCode": "const system=`You are the PrimeHomes Realty lead extraction assistant. Extract ONLY facts supported by the conversation. Do not invent values. Use null when unknown. Preserve existing structured lead data unless the customer clearly changes it. Normalize values only when safe.\n\nReturn ONLY valid JSON with exactly these fields: transaction_type, property_type, bedrooms, location, budget_min, budget_max, currency, timeline, customer_name, email, phone, confidence.\n\nAllowed transaction_type: BUY, RENT, SELL, LAND, ENQUIRY, null.\nAllowed property_type: APARTMENT, HOUSE, LAND, OFFICE, SHOP, OTHER, null.\nAllowed timeline: IMMEDIATELY, WITHIN_1_MONTH, WITHIN_3_MONTHS, RESEARCHING, null.\nCurrency for Nigerian naira should be NGN. bedrooms must be an integer or null. confidence must be between 0 and 1.\n\nCurrent structured lead: ${JSON.stringify($json.lead)}\nMissing fields: ${JSON.stringify($json.missing_fields)}\nRecent conversation: ${JSON.stringify($json.history)}\nLatest customer message: ${JSON.stringify($json.current_message)}`;\nreturn [{json:{...$json,ai_payload:{model:($env.LLM_MODEL || $env.GROQ_MODEL || 'openai/gpt-oss-120b'),temperature:0,messages:[{role:'system',content:system},{role:'user',content:$json.current_message}]}}}];"
+        "jsCode": "const system = `\nYou are the MAYVEE Homes & Properties lead extraction assistant.\n\nYour job is to extract structured lead information ONLY from facts the CUSTOMER has explicitly stated.\n\nCRITICAL RULES:\n\n1. NEVER invent, assume, guess, or infer missing information.\n2. If a value has not been clearly stated by the customer, return null.\n3. Do NOT infer LAND simply because the customer wants to build or develop property.\n4. Do NOT infer HOUSE, APARTMENT, LAND, OFFICE, SHOP, or any other property type unless the customer clearly states it.\n5. Do NOT infer a budget, location, timeline, bedroom count, phone number, email, or name.\n6. Ignore examples, suggestions, questions, or options mentioned by the assistant.\n7. Only customer-provided information counts as evidence.\n8. The latest explicit customer statement overrides older information if the customer clearly changes their requirement.\n9. Existing structured lead data may be preserved ONLY when:\n   - it was previously provided by the customer, AND\n   - the customer has not contradicted or changed it.\n10. Do not preserve an existing value if it appears inconsistent with the customer's actual conversation.\n11. Never use MAYVEE's own business contact information as customer information.\n12. A phone number may only be extracted if the CUSTOMER explicitly provides that phone number as their own/contact number.\n13. If the customer's message only answers one question, update only that field and preserve other customer-confirmed fields.\n14. Return ONLY valid JSON. Do not include markdown, explanations, comments, or additional text.\n\nTRANSACTION TYPES:\n\nAllowed transaction_type values:\n\nBUY\nRENT\nSELL\nBUILD\nINVEST\nENQUIRY\nnull\n\nInterpretation rules:\n\n- \"I want to buy a property\" → BUY\n- \"I want to purchase a home\" → BUY\n- \"I want to rent\" → RENT\n- \"I want to sell my property\" → SELL\n- \"I want to build a property\" → BUILD\n- \"I want to develop my land\" → BUILD\n- \"I want MAYVEE to build for me\" → BUILD\n- \"I'm looking for an investment opportunity\" → INVEST\n- General enquiry with no clear transaction → ENQUIRY\n\nIMPORTANT:\nLAND is NOT a transaction type.\n\nPROPERTY TYPES:\n\nAllowed property_type values:\n\nAPARTMENT\nHOUSE\nLAND\nOFFICE\nSHOP\nCOMMERCIAL\nOTHER\nnull\n\nExamples:\n\n\"I want to buy land\" →\ntransaction_type: BUY\nproperty_type: LAND\n\n\"I want to sell my land\" →\ntransaction_type: SELL\nproperty_type: LAND\n\n\"I want to build a house\" →\ntransaction_type: BUILD\nproperty_type: HOUSE\n\n\"I want to build a property\" →\ntransaction_type: BUILD\nproperty_type: null\n\n\"I want to develop my land\" →\ntransaction_type: BUILD\nproperty_type: LAND\n\n\"I want to invest in apartments\" →\ntransaction_type: INVEST\nproperty_type: APARTMENT\n\n\"I want to build or develop something\" →\ntransaction_type: BUILD\nproperty_type: null\n\nBEDROOMS:\n\nbedrooms must be an integer or null.\n\nOnly extract bedrooms when explicitly stated by the customer.\n\nExample:\n\n\"4-bedroom detached house\" →\nbedrooms: 4\nproperty_type: HOUSE\n\nDo not infer bedrooms based on property type.\n\nLOCATION:\n\nUse the most specific location explicitly given by the customer.\n\nExamples:\n\n\"Lekki, Lagos\" → \"Lekki, Lagos\"\n\"Abuja\" → \"Abuja\"\n\"Osogbo\" → \"Osogbo\"\n\nDo not reduce \"Lekki, Lagos\" to only \"Lagos\" if the customer explicitly supplied Lekki.\n\nBUDGET:\n\nbudget_min and budget_max must be numeric values or null.\n\nExamples:\n\n\"₦90 million\" →\nbudget_min: 90000000\nbudget_max: 90000000\n\n\"between ₦70m and ₦90m\" →\nbudget_min: 70000000\nbudget_max: 90000000\n\n\"up to ₦120m\" →\nbudget_min: null\nbudget_max: 120000000\n\nDo not reuse an old budget if the customer clearly gives a new one.\n\nCURRENCY:\n\nFor Nigerian naira use:\n\nNGN\n\nIf no currency can reasonably be determined, return null.\n\nTIMELINE:\n\nAllowed timeline values:\n\nIMMEDIATELY\nWITHIN_1_MONTH\nWITHIN_3_MONTHS\nWITHIN_6_MONTHS\nRESEARCHING\nnull\n\nExamples:\n\n\"as soon as possible\" → IMMEDIATELY\n\"within one month\" → WITHIN_1_MONTH\n\"within 3 months\" → WITHIN_3_MONTHS\n\"within six months\" → WITHIN_6_MONTHS\n\"I'm just looking around\" → RESEARCHING\n\nCUSTOMER DETAILS:\n\ncustomer_name:\nOnly use a name explicitly provided by the customer.\n\nemail:\nOnly use an email explicitly provided by the customer.\n\nphone:\nOnly use a phone number explicitly provided by the customer as their contact information.\n\nDo NOT extract MAYVEE's company phone number, WhatsApp number, email address, footer details, system information, or assistant-provided contact details.\n\nCONFIDENCE:\n\nconfidence must be between 0 and 1.\n\nUse:\n0.90-1.00 = explicitly and clearly stated\n0.70-0.89 = mostly clear\n0.50-0.69 = partially clear\nbelow 0.50 = highly ambiguous\n\nDo not increase confidence by guessing.\n\nRETURN EXACTLY THESE FIELDS:\n\n{\n  \"transaction_type\": null,\n  \"property_type\": null,\n  \"bedrooms\": null,\n  \"location\": null,\n  \"budget_min\": null,\n  \"budget_max\": null,\n  \"currency\": null,\n  \"timeline\": null,\n  \"customer_name\": null,\n  \"email\": null,\n  \"phone\": null,\n  \"confidence\": 0\n}\n\nCURRENT STRUCTURED LEAD:\n${JSON.stringify($json.lead)}\n\nMISSING FIELDS:\n${JSON.stringify($json.missing_fields)}\n\nRECENT CONVERSATION:\n${JSON.stringify($json.history)}\n\nLATEST CUSTOMER MESSAGE:\n${JSON.stringify($json.current_message)}\n\nBefore returning the JSON, internally verify:\n\n- Did the customer actually state every non-null value?\n- Did I accidentally copy something from an assistant message?\n- Did I infer LAND from BUILD?\n- Did I preserve incorrect existing lead information?\n- Did I confuse property_type and transaction_type?\n- Did I use MAYVEE's own phone/email instead of the customer's?\n\nIf any answer indicates uncertainty, use null instead.\n`;\n\nreturn [\n  {\n    json: {\n      ...$json,\n      ai_payload: {\n        model:\n          $env.LLM_MODEL ||\n          $env.GROQ_MODEL ||\n          \"openai/gpt-oss-120b\",\n        temperature: 0,\n        messages: [\n          {\n            role: \"system\",\n            content: system,\n          },\n          {\n            role: \"user\",\n            content: $json.current_message,\n          },\n        ],\n      },\n    },\n  },\n];"
       },
-      "id": "3928245b-563a-4e51-80c6-c96c79eedba8",
+      "id": "df7fd332-1ff2-4583-8429-af741f177ceb",
       "name": "Build Extraction Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5120,
-        416
+        -720,
+        688
       ]
     },
     {
@@ -224,26 +224,26 @@
         "bodyParametersJson": "={{ JSON.stringify($json.ai_payload) }}",
         "headerParametersJson": "={{ JSON.stringify({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ($env.LLM_API_KEY || $env.GROQ_API_KEY || $env.AI_API_KEY || '').trim(), 'User-Agent': 'Groq-Node/1.0 (Windows)' }) }}"
       },
-      "id": "9d7609d9-abd4-48f2-9fd1-e72f803902b0",
+      "id": "2bec25c3-f2ab-4626-9437-a5214f12832c",
       "name": "AI Extraction",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -4912,
-        416
+        -512,
+        688
       ]
     },
     {
       "parameters": {
-        "jsCode": "const r = $json;\nlet raw = r.output_text || r.text || r.content || r.response || r.choices?.[0]?.message?.content || r.choices?.[0]?.text;\nif (typeof raw !== 'string') raw = JSON.stringify(raw || {});\nraw = raw.trim().replace(/^```(?:json)?/i, '').replace(/```$/, '').trim();\ntry {\n  const parsed = JSON.parse(raw);\n  return [{ json: { ok: true, extraction: parsed } }];\n} catch (e) {\n  // Graceful rule-based extraction fallback from customer message\n  const norm = $('Normalize Event').item.json;\n  const msg = (norm.current_message || $('Get Message').item.json.content || '').toLowerCase();\n  const bedMatch = msg.match(/(\\d+)\\s*(?:bed|bedroom|br)/i);\n  const budgetMatch = msg.match(/(\\d+(?:\\.\\d+)?)\\s*(?:m|million)/i);\n  const locMatch = msg.match(/(?:in|around|at)\\s+([a-zA-Z0-9\\s]+?)(?:,|\\.|\\bwith\\b|\\bfor\\b|\\bmy\\b|$)/i);\n\n  const fallback = {\n    transaction_type: (msg.includes('buy') || msg.includes('purchase')) ? 'BUY' : (msg.includes('rent') || msg.includes('lease') ? 'RENT' : (msg.includes('sell') ? 'SELL' : 'BUY')),\n    property_type: (msg.includes('apartment') || msg.includes('flat')) ? 'APARTMENT' : (msg.includes('house') || msg.includes('duplex') ? 'HOUSE' : (msg.includes('land') ? 'LAND' : 'APARTMENT')),\n    bedrooms: bedMatch ? parseInt(bedMatch[1], 10) : null,\n    location: locMatch ? locMatch[1].trim() : 'Lekki',\n    budget_max: budgetMatch ? parseFloat(budgetMatch[1]) * 1000000 : null,\n    currency: 'NGN',\n    timeline: (msg.includes('urgent') || msg.includes('immediate')) ? 'IMMEDIATELY' : 'WITHIN_3_MONTHS',\n    confidence: 0.8\n  };\n  return [{ json: { ok: true, extraction: fallback, fallback_used: true } }];\n}"
+        "jsCode": "const r = $json;\n\n/*\n  MAYVEE Homes & Properties\n  Parse + validate AI lead extraction.\n\n  IMPORTANT:\n  - Never invent missing lead information.\n  - Invalid or unknown values become null.\n  - Rule-based fallback extracts only explicitly stated facts.\n*/\n\nlet raw =\n  r.output_text ||\n  r.text ||\n  r.content ||\n  r.response ||\n  r.choices?.[0]?.message?.content ||\n  r.choices?.[0]?.text;\n\n// --------------------------------------------------\n// Allowed MAYVEE values\n// --------------------------------------------------\n\nconst allowedTransactionTypes = [\n  'BUY',\n  'RENT',\n  'SELL',\n  'BUILD',\n  'INVEST',\n  'ENQUIRY',\n];\n\nconst allowedPropertyTypes = [\n  'APARTMENT',\n  'HOUSE',\n  'LAND',\n  'OFFICE',\n  'SHOP',\n  'COMMERCIAL',\n  'OTHER',\n];\n\nconst allowedTimelines = [\n  'IMMEDIATELY',\n  'WITHIN_1_MONTH',\n  'WITHIN_3_MONTHS',\n  'WITHIN_6_MONTHS',\n  'RESEARCHING',\n];\n\n// --------------------------------------------------\n// Helpers\n// --------------------------------------------------\n\nfunction cleanString(value) {\n  if (value === null || value === undefined) return null;\n\n  const str = String(value).trim();\n\n  return str.length ? str : null;\n}\n\nfunction cleanEnum(value, allowed) {\n  if (value === null || value === undefined) return null;\n\n  const normalized = String(value)\n    .trim()\n    .toUpperCase();\n\n  return allowed.includes(normalized)\n    ? normalized\n    : null;\n}\n\nfunction cleanNumber(value) {\n  if (value === null || value === undefined || value === '') {\n    return null;\n  }\n\n  const num = Number(value);\n\n  return Number.isFinite(num)\n    ? num\n    : null;\n}\n\nfunction cleanInteger(value) {\n  const num = cleanNumber(value);\n\n  if (num === null) return null;\n\n  return Number.isInteger(num)\n    ? num\n    : Math.round(num);\n}\n\nfunction cleanConfidence(value) {\n  const num = Number(value);\n\n  if (!Number.isFinite(num)) return 0;\n\n  return Math.min(1, Math.max(0, num));\n}\n\nfunction normalizeExtraction(parsed) {\n  return {\n    transaction_type: cleanEnum(\n      parsed.transaction_type,\n      allowedTransactionTypes\n    ),\n\n    property_type: cleanEnum(\n      parsed.property_type,\n      allowedPropertyTypes\n    ),\n\n    bedrooms: cleanInteger(parsed.bedrooms),\n\n    location: cleanString(parsed.location),\n\n    budget_min: cleanNumber(parsed.budget_min),\n\n    budget_max: cleanNumber(parsed.budget_max),\n\n    currency: parsed.currency\n      ? String(parsed.currency).trim().toUpperCase()\n      : null,\n\n    timeline: cleanEnum(\n      parsed.timeline,\n      allowedTimelines\n    ),\n\n    customer_name: cleanString(parsed.customer_name),\n\n    email: cleanString(parsed.email),\n\n    phone: cleanString(parsed.phone),\n\n    confidence: cleanConfidence(parsed.confidence),\n  };\n}\n\n// --------------------------------------------------\n// Try AI JSON first\n// --------------------------------------------------\n\ntry {\n  if (typeof raw !== 'string') {\n    raw = JSON.stringify(raw || {});\n  }\n\n  raw = raw\n    .trim()\n    .replace(/^```(?:json)?/i, '')\n    .replace(/```$/i, '')\n    .trim();\n\n  const parsed = JSON.parse(raw);\n\n  if (\n    !parsed ||\n    typeof parsed !== 'object' ||\n    Array.isArray(parsed)\n  ) {\n    throw new Error('AI extraction was not a JSON object.');\n  }\n\n  const extraction = normalizeExtraction(parsed);\n\n  return [\n    {\n      json: {\n        ok: true,\n        extraction,\n        fallback_used: false,\n      },\n    },\n  ];\n} catch (error) {\n\n  // --------------------------------------------------\n  // Conservative rule-based fallback\n  // --------------------------------------------------\n  //\n  // This fallback MUST NOT invent anything.\n  // If the customer did not explicitly provide it,\n  // leave it null.\n  // --------------------------------------------------\n\n  const norm = $('Normalize Event').item.json;\n\n  const originalMessage =\n    norm.current_message ||\n    $('Get Message').item.json.content ||\n    '';\n\n  const msg = originalMessage.toLowerCase();\n\n  // -------------------------\n  // Transaction type\n  // -------------------------\n\n  let transactionType = null;\n\n  if (\n    /\\b(build|develop|development|construct|construction)\\b/i.test(msg)\n  ) {\n    transactionType = 'BUILD';\n  } else if (\n    /\\b(invest|investment|investing)\\b/i.test(msg)\n  ) {\n    transactionType = 'INVEST';\n  } else if (\n    /\\b(buy|purchase|buying|purchase)\\b/i.test(msg)\n  ) {\n    transactionType = 'BUY';\n  } else if (\n    /\\b(rent|lease|renting)\\b/i.test(msg)\n  ) {\n    transactionType = 'RENT';\n  } else if (\n    /\\b(sell|selling|sale)\\b/i.test(msg)\n  ) {\n    transactionType = 'SELL';\n  }\n\n  // -------------------------\n  // Property type\n  // -------------------------\n\n  let propertyType = null;\n\n  if (\n    /\\b(apartment|flat)\\b/i.test(msg)\n  ) {\n    propertyType = 'APARTMENT';\n  } else if (\n    /\\b(house|duplex|bungalow|detached|semi-detached|terrace|terraced)\\b/i.test(msg)\n  ) {\n    propertyType = 'HOUSE';\n  } else if (\n    /\\bland\\b/i.test(msg)\n  ) {\n    propertyType = 'LAND';\n  } else if (\n    /\\boffice\\b/i.test(msg)\n  ) {\n    propertyType = 'OFFICE';\n  } else if (\n    /\\bshop\\b/i.test(msg)\n  ) {\n    propertyType = 'SHOP';\n  } else if (\n    /\\bcommercial\\b/i.test(msg)\n  ) {\n    propertyType = 'COMMERCIAL';\n  }\n\n  // -------------------------\n  // Bedrooms\n  // -------------------------\n\n  const bedMatch =\n    msg.match(/\\b(\\d+)\\s*[- ]?(?:bed|bedroom|bedrooms|br)\\b/i);\n\n  const bedrooms =\n    bedMatch\n      ? parseInt(bedMatch[1], 10)\n      : null;\n\n  // -------------------------\n  // Budget\n  // -------------------------\n\n  let budgetMin = null;\n  let budgetMax = null;\n  let currency = null;\n\n  const rangeBudgetMatch = msg.match(\n    /(?:₦|ngn|n)?\\s*(\\d+(?:\\.\\d+)?)\\s*(?:m|million)?\\s*(?:-|to|and)\\s*(?:₦|ngn|n)?\\s*(\\d+(?:\\.\\d+)?)\\s*(?:m|million)/i\n  );\n\n  const singleBudgetMatch = msg.match(\n    /(?:budget(?:\\s+is|\\s+of)?|₦|ngn)\\s*(?:₦|ngn|n)?\\s*(\\d+(?:\\.\\d+)?)\\s*(m|million)?/i\n  );\n\n  if (rangeBudgetMatch) {\n    const first = parseFloat(rangeBudgetMatch[1]);\n    const second = parseFloat(rangeBudgetMatch[2]);\n\n    budgetMin = first * 1000000;\n    budgetMax = second * 1000000;\n    currency = 'NGN';\n  } else if (singleBudgetMatch) {\n    let amount = parseFloat(singleBudgetMatch[1]);\n\n    if (\n      singleBudgetMatch[2] &&\n      /m|million/i.test(singleBudgetMatch[2])\n    ) {\n      amount *= 1000000;\n    }\n\n    budgetMin = amount;\n    budgetMax = amount;\n    currency = 'NGN';\n  }\n\n  if (\n    msg.includes('₦') ||\n    /\\bngn\\b/i.test(msg) ||\n    /\\bnaira\\b/i.test(msg)\n  ) {\n    currency = 'NGN';\n  }\n\n  // -------------------------\n  // Timeline\n  // -------------------------\n\n  let timeline = null;\n\n  if (\n    /\\b(immediately|urgent|urgently|as soon as possible|asap)\\b/i.test(msg)\n  ) {\n    timeline = 'IMMEDIATELY';\n  } else if (\n    /\\b(within|next)\\s*(?:1|one)\\s*month\\b/i.test(msg)\n  ) {\n    timeline = 'WITHIN_1_MONTH';\n  } else if (\n    /\\b(within|next)\\s*(?:3|three)\\s*months?\\b/i.test(msg)\n  ) {\n    timeline = 'WITHIN_3_MONTHS';\n  } else if (\n    /\\b(within|next)\\s*(?:6|six)\\s*months?\\b/i.test(msg)\n  ) {\n    timeline = 'WITHIN_6_MONTHS';\n  } else if (\n    /\\b(researching|just looking|looking around|exploring options)\\b/i.test(msg)\n  ) {\n    timeline = 'RESEARCHING';\n  }\n\n  // -------------------------\n  // Location\n  // -------------------------\n\n  let location = null;\n\n  const locationMatch = originalMessage.match(\n    /\\b(?:in|around|at)\\s+([A-Za-z][A-Za-z\\s'-]*(?:,\\s*[A-Za-z][A-Za-z\\s'-]*)?)(?=\\.|,?\\s+(?:my|with|and|budget|within|for|i'd|i\\s+want)|$)/i\n  );\n\n  if (locationMatch) {\n    location = locationMatch[1].trim();\n  }\n\n  // -------------------------\n  // Email\n  // -------------------------\n\n  const emailMatch = originalMessage.match(\n    /\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}\\b/i\n  );\n\n  const email =\n    emailMatch\n      ? emailMatch[0]\n      : null;\n\n  // -------------------------\n  // Phone\n  // -------------------------\n\n  let phone = null;\n\n  const phoneMatch = originalMessage.match(\n    /(?:\\+234|0)\\d{10}\\b/\n  );\n\n  if (phoneMatch) {\n    phone = phoneMatch[0];\n  }\n\n  // -------------------------\n  // Confidence\n  // -------------------------\n\n  const explicitValues = [\n    transactionType,\n    propertyType,\n    bedrooms,\n    location,\n    budgetMin,\n    budgetMax,\n    timeline,\n    email,\n    phone,\n  ].filter(\n    value =>\n      value !== null &&\n      value !== undefined\n  ).length;\n\n  const confidence =\n    explicitValues >= 4\n      ? 0.9\n      : explicitValues >= 2\n        ? 0.8\n        : explicitValues === 1\n          ? 0.7\n          : 0;\n\n  const fallback = {\n    transaction_type: transactionType,\n    property_type: propertyType,\n    bedrooms,\n    location,\n    budget_min: budgetMin,\n    budget_max: budgetMax,\n    currency,\n    timeline,\n    customer_name: null,\n    email,\n    phone,\n    confidence,\n  };\n\n  return [\n    {\n      json: {\n        ok: true,\n        extraction: fallback,\n        fallback_used: true,\n        parse_error: error.message,\n      },\n    },\n  ];\n}"
       },
-      "id": "b12b4239-7278-4819-9ab8-f83a430ff64b",
+      "id": "1f5f05a1-0f85-4911-91ca-ba5d71d9688d",
       "name": "Parse AI JSON",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5936,
-        832
+        -1536,
+        1104
       ]
     },
     {
@@ -270,26 +270,26 @@
         },
         "options": {}
       },
-      "id": "5c414144-0907-4dbb-961d-5430891642e3",
+      "id": "43395ebd-c66c-4c6d-a20e-7287ee034804",
       "name": "AI Parse OK?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -5712,
-        832
+        -1312,
+        1104
       ]
     },
     {
       "parameters": {
-        "jsCode": "const x=$json.extraction||{};\nconst enums={transaction_type:['BUY','RENT','SELL','LAND','ENQUIRY'],property_type:['APARTMENT','HOUSE','LAND','OFFICE','SHOP','OTHER'],timeline:['IMMEDIATELY','WITHIN_1_MONTH','WITHIN_3_MONTHS','RESEARCHING']};\nfor(const [k,vals] of Object.entries(enums)){if(x[k]!==null&&x[k]!==undefined&&!vals.includes(x[k]))return [{json:{ok:false,error:{code:'AI_ERROR',message:`Invalid ${k} value`,value:x[k]}}}];}\nif(x.bedrooms!==null&&x.bedrooms!==undefined&&(!Number.isInteger(Number(x.bedrooms))||Number(x.bedrooms)<0||Number(x.bedrooms)>50))return [{json:{ok:false,error:{code:'AI_ERROR',message:'Invalid bedrooms value',value:x.bedrooms}}}];\nconst confidence=Number(x.confidence??0);\nif(confidence<0||confidence>1)return [{json:{ok:false,error:{code:'AI_ERROR',message:'Invalid confidence value',value:x.confidence}}}];\nconst num=v=>v===null||v===undefined||v===''?null:Number(v);\nreturn [{json:{ok:true,extraction:{transaction_type:x.transaction_type??null,property_type:x.property_type??null,bedrooms:x.bedrooms==null?null:Number(x.bedrooms),location:x.location??null,budget_min:num(x.budget_min),budget_max:num(x.budget_max),currency:x.currency??null,timeline:x.timeline??null,customer_name:x.customer_name??null,email:x.email??null,phone:x.phone??null,confidence}}}];"
+        "jsCode": "const x = $json.extraction || {};\n\n// --------------------------------------------------\n// MAYVEE allowed values\n// --------------------------------------------------\n\nconst enums = {\n  transaction_type: [\n    'BUY',\n    'RENT',\n    'SELL',\n    'BUILD',\n    'INVEST',\n    'ENQUIRY'\n  ],\n\n  property_type: [\n    'APARTMENT',\n    'HOUSE',\n    'LAND',\n    'OFFICE',\n    'SHOP',\n    'COMMERCIAL',\n    'OTHER'\n  ],\n\n  timeline: [\n    'IMMEDIATELY',\n    'WITHIN_1_MONTH',\n    'WITHIN_3_MONTHS',\n    'WITHIN_6_MONTHS',\n    'RESEARCHING'\n  ]\n};\n\n// --------------------------------------------------\n// Validate enums\n// --------------------------------------------------\n\nfor (const [key, allowedValues] of Object.entries(enums)) {\n  const value = x[key];\n\n  if (\n    value !== null &&\n    value !== undefined &&\n    !allowedValues.includes(value)\n  ) {\n    return [\n      {\n        json: {\n          ok: false,\n          error: {\n            code: 'AI_ERROR',\n            message: `Invalid ${key} value`,\n            value\n          }\n        }\n      }\n    ];\n  }\n}\n\n// --------------------------------------------------\n// Validate bedrooms\n// --------------------------------------------------\n\nif (\n  x.bedrooms !== null &&\n  x.bedrooms !== undefined\n) {\n  const bedrooms = Number(x.bedrooms);\n\n  if (\n    !Number.isInteger(bedrooms) ||\n    bedrooms < 0 ||\n    bedrooms > 50\n  ) {\n    return [\n      {\n        json: {\n          ok: false,\n          error: {\n            code: 'AI_ERROR',\n            message: 'Invalid bedrooms value',\n            value: x.bedrooms\n          }\n        }\n      }\n    ];\n  }\n}\n\n// --------------------------------------------------\n// Validate confidence\n// --------------------------------------------------\n\nconst confidence = Number(x.confidence ?? 0);\n\nif (\n  !Number.isFinite(confidence) ||\n  confidence < 0 ||\n  confidence > 1\n) {\n  return [\n    {\n      json: {\n        ok: false,\n        error: {\n          code: 'AI_ERROR',\n          message: 'Invalid confidence value',\n          value: x.confidence\n        }\n      }\n    }\n  ];\n}\n\n// --------------------------------------------------\n// Numeric helper\n// --------------------------------------------------\n\nconst toNumberOrNull = (value) => {\n  if (\n    value === null ||\n    value === undefined ||\n    value === ''\n  ) {\n    return null;\n  }\n\n  const number = Number(value);\n\n  return Number.isFinite(number)\n    ? number\n    : null;\n};\n\nconst budgetMin = toNumberOrNull(x.budget_min);\nconst budgetMax = toNumberOrNull(x.budget_max);\n\n// --------------------------------------------------\n// Validate budgets\n// --------------------------------------------------\n\nif (\n  x.budget_min !== null &&\n  x.budget_min !== undefined &&\n  x.budget_min !== '' &&\n  budgetMin === null\n) {\n  return [\n    {\n      json: {\n        ok: false,\n        error: {\n          code: 'AI_ERROR',\n          message: 'Invalid budget_min value',\n          value: x.budget_min\n        }\n      }\n    }\n  ];\n}\n\nif (\n  x.budget_max !== null &&\n  x.budget_max !== undefined &&\n  x.budget_max !== '' &&\n  budgetMax === null\n) {\n  return [\n    {\n      json: {\n        ok: false,\n        error: {\n          code: 'AI_ERROR',\n          message: 'Invalid budget_max value',\n          value: x.budget_max\n        }\n      }\n    }\n  ];\n}\n\nif (\n  budgetMin !== null &&\n  budgetMax !== null &&\n  budgetMin > budgetMax\n) {\n  return [\n    {\n      json: {\n        ok: false,\n        error: {\n          code: 'AI_ERROR',\n          message: 'budget_min cannot be greater than budget_max',\n          value: {\n            budget_min: budgetMin,\n            budget_max: budgetMax\n          }\n        }\n      }\n    }\n  ];\n}\n\n// --------------------------------------------------\n// Validate currency\n// --------------------------------------------------\n\nlet currency = x.currency ?? null;\n\nif (currency !== null && currency !== undefined) {\n  currency = String(currency).trim().toUpperCase();\n\n  if (currency.length === 0) {\n    currency = null;\n  }\n}\n\n// --------------------------------------------------\n// Clean string helper\n// --------------------------------------------------\n\nconst cleanString = (value) => {\n  if (\n    value === null ||\n    value === undefined\n  ) {\n    return null;\n  }\n\n  const text = String(value).trim();\n\n  return text.length\n    ? text\n    : null;\n};\n\n// --------------------------------------------------\n// Return validated extraction\n// --------------------------------------------------\n\nreturn [\n  {\n    json: {\n      ok: true,\n\n      extraction: {\n        transaction_type:\n          x.transaction_type ?? null,\n\n        property_type:\n          x.property_type ?? null,\n\n        bedrooms:\n          x.bedrooms === null ||\n          x.bedrooms === undefined\n            ? null\n            : Number(x.bedrooms),\n\n        location:\n          cleanString(x.location),\n\n        budget_min:\n          budgetMin,\n\n        budget_max:\n          budgetMax,\n\n        currency:\n          currency,\n\n        timeline:\n          x.timeline ?? null,\n\n        customer_name:\n          cleanString(x.customer_name),\n\n        email:\n          cleanString(x.email),\n\n        phone:\n          cleanString(x.phone),\n\n        confidence\n      }\n    }\n  }\n];"
       },
-      "id": "a30e524a-1c38-48f6-9cc4-16c770960624",
+      "id": "a3c00ffc-33fa-47eb-b491-e763fa67f831",
       "name": "Validate Extraction",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5456,
-        704
+        -1056,
+        976
       ]
     },
     {
@@ -316,26 +316,26 @@
         },
         "options": {}
       },
-      "id": "68023a39-c3c5-4b7d-9db2-7c960de0c899",
+      "id": "7ea67c05-8136-43e6-9fcc-f80b28012c12",
       "name": "Extraction Valid?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -5280,
-        832
+        -880,
+        1104
       ]
     },
     {
       "parameters": {
         "jsCode": "const existing=$('Get Lead').item.json.data || $('Get Lead').item.json.lead || $('Get Lead').item.json;\nconst x=$json.extraction; const update={};\nfor(const k of ['transaction_type','property_type','bedrooms','location','budget_min','budget_max','currency','timeline','customer_name','email','phone']){if(x[k]!==null&&x[k]!==undefined&&x[k]!=='')update[k]=x[k];}\nreturn [{json:{lead_id:$('Normalize Event').item.json.lead_id,message_id:$('Normalize Event').item.json.message_id,conversation_id:$('Normalize Event').item.json.conversation_id,extraction:x,existing_lead:existing,lead_update:update}}];"
       },
-      "id": "81af0014-a2f5-4cf4-9736-20b34f344c0d",
+      "id": "6810f0ea-9f6a-4606-a08c-6f393976f594",
       "name": "Build Lead Update",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -5024,
-        704
+        -624,
+        976
       ]
     },
     {
@@ -349,13 +349,13 @@
         "bodyParametersJson": "={{ JSON.stringify($json.lead_update) }}",
         "headerParametersJson": "{\"Content-Type\": \"application/json\"}"
       },
-      "id": "3d538225-3b3a-42bf-ba06-eb1de92ba4b0",
+      "id": "0dfaf55f-f2d1-4e6e-8b82-a324db26a2f1",
       "name": "Update Lead",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -4832,
-        832
+        -432,
+        1104
       ]
     },
     {
@@ -366,26 +366,26 @@
           "timeout": 15000
         }
       },
-      "id": "02120334-f01f-40d5-873b-403c2dd149ac",
+      "id": "e5cbf5c9-7609-414e-9751-87b1758594d9",
       "name": "Trigger Qualification",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -4496,
-        -224
+        -96,
+        48
       ]
     },
     {
       "parameters": {
-        "jsCode": "const b=$('Build Lead Update').item.json;\nconst missing=['transaction_type','property_type','location','budget','bedrooms','timeline','contact'].filter(k=>{if(k==='budget')return b.lead_update.budget_min===undefined&&b.lead_update.budget_max===undefined&&b.existing_lead?.budget_min==null&&b.existing_lead?.budget_max==null;if(k==='contact')return !(b.existing_lead?.email||b.existing_lead?.phone||b.extraction.email||b.extraction.phone);return b.lead_update[k]===undefined&&!b.existing_lead?.[k];});\nconst system=`Generate a concise professional customer-facing response for PrimeHomes Realty. Use only known lead information. Never claim a property is available, quote a price, or promise an outcome unless verified. Ask only the most useful missing question using this priority: transaction type, property type, location, budget, bedrooms, timeline, contact details. If no important field is missing, acknowledge the requirements and say the team can help narrow suitable options. Do not mention internal systems, AI, scores, or workflow.\nLead update: ${JSON.stringify(b.lead_update)}\nExisting lead: ${JSON.stringify(b.existing_lead)}\nMissing fields: ${JSON.stringify(missing)}\nLatest customer message: ${JSON.stringify($('Build AI Context').item.json.current_message)}`;\nreturn [{json:{...b,missing_fields:missing,ai_payload:{model:($env.LLM_MODEL || $env.GROQ_MODEL || 'openai/gpt-oss-120b'),temperature:0.3,messages:[{role:'system',content:system},{role:'user',content:$('Build AI Context').item.json.current_message}]}}}];"
+        "jsCode": "const b=$('Build Lead Update').item.json;\nconst missing=['transaction_type','property_type','location','budget','bedrooms','timeline','contact'].filter(k=>{if(k==='budget')return b.lead_update.budget_min===undefined&&b.lead_update.budget_max===undefined&&b.existing_lead?.budget_min==null&&b.existing_lead?.budget_max==null;if(k==='contact')return !(b.existing_lead?.email||b.existing_lead?.phone||b.extraction.email||b.extraction.phone);return b.lead_update[k]===undefined&&!b.existing_lead?.[k];});\nconst system=`Generate a concise professional customer-facing response for MAYVEE Homes & Properties. Use only known lead information. Never claim a property is available, quote a price, or promise an outcome unless verified. Ask only the most useful missing question using this priority: transaction type, property type, location, budget, bedrooms, timeline, contact details. If no important field is missing, acknowledge the requirements and say the team can help narrow suitable options. Do not mention internal systems, AI, scores, or workflow.\nLead update: ${JSON.stringify(b.lead_update)}\nExisting lead: ${JSON.stringify(b.existing_lead)}\nMissing fields: ${JSON.stringify(missing)}\nLatest customer message: ${JSON.stringify($('Build AI Context').item.json.current_message)}`;\nreturn [{json:{...b,missing_fields:missing,ai_payload:{model:($env.LLM_MODEL || $env.GROQ_MODEL || 'openai/gpt-oss-120b'),temperature:0.3,messages:[{role:'system',content:system},{role:'user',content:$('Build AI Context').item.json.current_message}]}}}];"
       },
-      "id": "23e293fc-3d1f-455c-8fe2-88f04f6ef8f6",
+      "id": "0e9d0ce6-a138-4bdc-a0c0-656200203980",
       "name": "Build Response Prompt",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4288,
-        -224
+        112,
+        48
       ]
     },
     {
@@ -399,26 +399,26 @@
         "bodyParametersJson": "={{ JSON.stringify($json.ai_payload) }}",
         "headerParametersJson": "={{ JSON.stringify({ 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + ($env.LLM_API_KEY || $env.GROQ_API_KEY || $env.AI_API_KEY || '').trim(), 'User-Agent': 'Groq-Node/1.0 (Windows)' }) }}"
       },
-      "id": "5d54274a-0874-4c72-9e14-99100d815bdf",
+      "id": "75c23dde-4dcb-4469-8cbb-6800ccdcde15",
       "name": "Generate Response",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -4064,
-        -224
+        336,
+        48
       ]
     },
     {
       "parameters": {
-        "jsCode": "const r = $json;\nconst text = r.output_text || r.text || r.content || r.response || r.choices?.[0]?.message?.content || r.choices?.[0]?.text;\nif (!text || typeof text !== 'string') {\n  const upd = $('Build Lead Update').item.json;\n  const lead = upd.lead_update || upd.extraction || {};\n  let reply = \"Hello from PrimeHomes Realty! Thank you for your enquiry\";\n  if (lead.property_type) reply += ` regarding a ${lead.property_type.toLowerCase()}`;\n  if (lead.bedrooms) reply += ` with ${lead.bedrooms} bedrooms`;\n  if (lead.location) reply += ` in ${lead.location}`;\n  if (lead.budget_max) reply += ` around \u20a6${(lead.budget_max / 1000000).toLocaleString()}M`;\n  reply += \". Our sales advisory team has verified matching listings available and will share full options with you shortly. Could you also share your preferred contact phone number?\";\n  return [{ json: { ok: true, response: reply } }];\n}\nreturn [{ json: { ok: true, response: text.trim() } }];"
+        "jsCode": "const r = $json;\nconst text = r.output_text || r.text || r.content || r.response || r.choices?.[0]?.message?.content || r.choices?.[0]?.text;\nif (!text || typeof text !== 'string') {\n  const upd = $('Build Lead Update').item.json;\n  const lead = upd.lead_update || upd.extraction || {};\n  let reply = \"Hello from MAYVEE Homes & Properties! Thank you for your enquiry\";\n  if (lead.property_type) reply += ` regarding a ${lead.property_type.toLowerCase()}`;\n  if (lead.bedrooms) reply += ` with ${lead.bedrooms} bedrooms`;\n  if (lead.location) reply += ` in ${lead.location}`;\n  if (lead.budget_max) reply += ` around ₦${(lead.budget_max / 1000000).toLocaleString()}M`;\n  reply += \". Our sales advisory team has verified matching listings available and will share full options with you shortly. Could you also share your preferred contact phone number?\";\n  return [{ json: { ok: true, response: reply } }];\n}\nreturn [{ json: { ok: true, response: text.trim() } }];"
       },
-      "id": "e7fc48c3-c65e-4971-aee7-89fa868200cf",
+      "id": "7f3e9205-79fb-473b-8786-60688d85a9ec",
       "name": "Extract Response Text",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -3840,
-        -224
+        560,
+        48
       ]
     },
     {
@@ -432,13 +432,13 @@
         "bodyParametersJson": "={{ JSON.stringify({ content: $json.response, sender_type: 'BOT' }) }}",
         "headerParametersJson": "{\"Content-Type\": \"application/json\"}"
       },
-      "id": "a5209d0f-2899-40f0-8859-70f9351175e6",
+      "id": "ff6a1180-bdb3-462a-8bd0-bbd9157a2be2",
       "name": "Save Bot Response",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -3616,
-        -224
+        784,
+        48
       ]
     },
     {
@@ -448,13 +448,13 @@
           "timeout": 10000
         }
       },
-      "id": "cbe935ec-db48-4127-8464-10af3754d4e6",
+      "id": "f750e77b-a2fa-49b4-a3e0-821b58724751",
       "name": "Get Classification",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -4416,
-        192
+        -16,
+        464
       ]
     },
     {
@@ -480,33 +480,33 @@
         },
         "options": {}
       },
-      "id": "29091526-451c-4516-9ca0-132e3e8bc19f",
+      "id": "6408182a-3dfd-4f4f-a517-29e7e9c4a799",
       "name": "Check Lead Classification",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
       "position": [
-        -4192,
-        192
+        208,
+        464
       ]
     },
     {
       "parameters": {
+        "requestMethod": "POST",
         "url": "={{ $env.SALES_NOTIFY_WEBHOOK_URL }}",
+        "jsonParameters": true,
         "options": {
           "timeout": 10000
         },
-        "requestMethod": "POST",
-        "jsonParameters": true,
-        "headerParametersJson": "{\"Content-Type\": \"application/json\"}",
-        "bodyParametersJson": "={{ JSON.stringify({ event: 'LEAD_QUALIFIED', lead_id: $('Normalize Event').item.json.lead_id, score: $json.score || 85, classification: 'HOT', timestamp: new Date().toISOString() }) }}"
+        "bodyParametersJson": "={{ JSON.stringify({ event: 'LEAD_QUALIFIED', lead_id: $('Normalize Event').item.json.lead_id, score: $json.score || 85, classification: 'HOT', timestamp: new Date().toISOString() }) }}",
+        "headerParametersJson": "{\"Content-Type\": \"application/json\"}"
       },
-      "id": "81a93857-f4e4-443c-97b1-462feabe1b98",
+      "id": "3cd8d117-75a5-4bc6-8dd6-a5193bfbd58b",
       "name": "Notify Sales",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -3968,
-        0
+        432,
+        272
       ],
       "continueOnFail": true
     },
@@ -521,13 +521,13 @@
         "bodyParametersJson": "={{ JSON.stringify({ actor_type: 'SYSTEM', activity_type: 'MESSAGE_PROCESSED', description: 'n8n workflow processed customer enquiry' }) }}",
         "headerParametersJson": "{\"Content-Type\": \"application/json\"}"
       },
-      "id": "7ef3fc78-e573-4f53-b774-9dc4111b1dda",
+      "id": "bf032415-dcf7-4a9f-b55e-deffbffff652",
       "name": "Record Activity",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -3744,
-        192
+        656,
+        464
       ],
       "continueOnFail": true
     },
@@ -542,37 +542,37 @@
         "bodyParametersJson": "{\"processing_status\": \"PROCESSED\"}",
         "headerParametersJson": "{\"Content-Type\": \"application/json\"}"
       },
-      "id": "9cc95de9-017e-4efc-b8ed-b5e04b6c1cf5",
+      "id": "78033786-e1e5-422a-9e7a-bf379f63ac90",
       "name": "Mark Message Processed",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 2,
       "position": [
-        -3520,
-        192
+        880,
+        464
       ]
     },
     {
       "parameters": {
         "jsCode": "const lead=$('Get Classification').item.json.data || $('Get Classification').item.json.lead || $('Get Classification').item.json;\nreturn [{json:{ok:true,status:'COMPLETED',workflow:'PRH-LEAD-PROCESS-MESSAGE',message_id:$('Normalize Event').item.json.message_id,lead_id:$('Normalize Event').item.json.lead_id,classification:lead.classification||null,score:lead.score??null,response:$('Extract Response Text').item.json.response}}];"
       },
-      "id": "ccb8b0bc-6383-45e5-a7f1-991a22e7c7b6",
+      "id": "1ac9e76b-1fee-4ee4-b2e9-a9700a4a8ab9",
       "name": "Build Result",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -4176,
-        544
+        224,
+        816
       ]
     },
     {
       "parameters": {},
-      "id": "6970871d-6281-4098-a337-d5c00be432eb",
+      "id": "fdcd693c-bf27-4b99-b4f0-8dd2fc03485c",
       "name": "Return Result",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 2,
       "position": [
-        -3968,
-        544
+        432,
+        816
       ]
     }
   ],
@@ -741,8 +741,7 @@
             "type": "main",
             "index": 0
           }
-        ],
-        []
+        ]
       ]
     },
     "Validate Extraction": {
@@ -764,8 +763,7 @@
             "type": "main",
             "index": 0
           }
-        ],
-        []
+        ]
       ]
     },
     "Build Lead Update": {
@@ -908,15 +906,17 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
+    "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "66b45b1a-eb50-4dd9-aaf7-d04f5c5de2c7",
+  "versionId": "810d768b-6b54-401a-b392-31293b64a296",
   "meta": {
-    "instanceId": "d746e75aa910c1d4e6e9a87892d7e5343fb9f254fc30cd7eae4499996f727ea4"
+    "instanceId": "776fea3b34f626d6c5ae4c96f940c22273a7e8c4aed2ff196783cf3bc6eb18f7"
   },
-  "id": "iP9E0IdcwoMREpi7",
+  "nodeGroups": [],
+  "id": "F3KZVn0dtjp7GRTz",
   "tags": []
 }

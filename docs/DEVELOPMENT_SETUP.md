@@ -199,8 +199,8 @@ The application should use a database URL stored in an environment variable.
 Example:
 
 ```env
-DATABASE_URL=mysql+aiomysql://root:1234@localhost:3306/real_estate_leads
-DATABASE_URL_SYNC=mysql+pymysql://root:1234@localhost:3306/real_estate_leads
+DATABASE_URL=mysql+aiomysql://root:YOUR_PASSWORD@localhost:3306/real_estate_leads
+DATABASE_URL_SYNC=mysql+pymysql://root:YOUR_PASSWORD@localhost:3306/real_estate_leads
 ```
 
 Credentials must not be committed to Git.
